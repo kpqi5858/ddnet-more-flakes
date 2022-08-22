@@ -10,7 +10,7 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  build-cmake:
+  build-ddnet:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
@@ -18,9 +18,10 @@ jobs:
         run: |
           git clone --recursive -b ${{ github.event.inputs.ddnet_tag }} https://github.com/ddnet/ddnet
 
-      - name: Build ddnet
+      - name: Apply patch and build ddnet
         run: |
           cd ddnet
+          git apply ../freeze_flakes.patch
           mkdir release
           cd release
           cmake -A x64 -DCMAKE_BUILD_TYPE=Release -Werror=dev -DDOWNLOAD_GTEST=ON -DCMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE=. ..
@@ -36,4 +37,5 @@ jobs:
       - name: Upload the artifact
         uses: actions/upload-artifact@v3.1.0
         with:
+          name: ddnet-windows
           path: ddnet/release/artifacts
