@@ -35,7 +35,6 @@ jobs:
           mv *-win64.zip artifacts
       
       - name: Upload the artifact
-        uses: actions/upload-artifact@v3.1.0
+        uses: softprops/action-gh-release@v1
         with:
-          name: ddnet-windows
-          path: ddnet/release/artifacts
+          files: ddnet/release/artifacts/*
