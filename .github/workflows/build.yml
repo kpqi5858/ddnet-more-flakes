@@ -1,0 +1,38 @@
+name: Build ddnet for windows with patch
+
+# Controls when the workflow will run
+on:
+  workflow_dispatch:
+    inputs:
+      ddnet_tag:
+        description: 'DDNet tag to patch'
+        required: true
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build-cmake:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Clone ddnet repository
+        run: |
+          git clone --recursive -b ${{ github.event.inputs.ddnet_tag }} https://github.com/ddnet/ddnet
+          cd ddnet
+
+      - name: Build ddnet
+        run: |
+          mkdir release
+          cd release
+          cmake -A x64 -DCMAKE_BUILD_TYPE=Release -Werror=dev -DDOWNLOAD_GTEST=ON -DCMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE=. ..
+          cmake --build . --config Release --target everything
+          
+      - name: Package artifact
+        run: |
+          cmake --build . --config Release --target package_default
+          mkdir artifacts
+          mv *-win64.zip artifacts
+      
+      - name: Upload the artifact
+        uses: actions/upload-artifact@v3.1.0
+        with:
+          path: ddnet/release/artifacts
