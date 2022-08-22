@@ -1,0 +1,22 @@
+diff --git a/src/game/client/components/effects.cpp b/src/game/client/components/effects.cpp
+index c8c9aa67d..2344585de 100644
+--- a/src/game/client/components/effects.cpp
++++ b/src/game/client/components/effects.cpp
+@@ -81,7 +81,7 @@ void CEffects::PowerupShine(vec2 Pos, vec2 Size)
+ 
+ void CEffects::FreezingFlakes(vec2 Pos, vec2 Size)
+ {
+-	if(!m_Add5hz)
++	if(!m_Add50hz)
+ 		return;
+ 
+ 	CParticle p;
+@@ -93,7 +93,7 @@ void CEffects::FreezingFlakes(vec2 Pos, vec2 Size)
+ 	p.m_StartSize = (random_float() + 0.5f) * 16.0f;
+ 	p.m_EndSize = p.m_StartSize * 0.5f;
+ 	p.m_UseAlphaFading = true;
+-	p.m_StartAlpha = 1.0f;
++	p.m_StartAlpha = 0.3f;
+ 	p.m_EndAlpha = 0.0f;
+ 	p.m_Rot = random_float() * pi * 2;
+ 	p.m_Rotspeed = pi;
